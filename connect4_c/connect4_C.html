@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+   <title>CS 343 -- Connect 4 in C</title>
+   <style type="text/css">
+      .listHeader {
+         padding-bottom: 0;
+         margin-bottom: 0;
+      }
+
+      ul {
+         padding-top: 0;
+         margin-top: 0;
+      }
+
+      .nowrap {
+         white-space: nowrap;
+      }
+   </style>
+</head>
+
+<body>
+<h1>CS 343 Project: Connect 4 in C</h1>
+
+This assignment was originally prepared by Prof. Nandigam.
+
+<h2>Objectives</h2>
+
+Using arrays and command-line arguments in C.
+
+<h2> Problem Specification</h2>
+
+<p>Write a C program to play a game of Connect 4. Here is the
+   description of this game taken from <a target="_top" href="http://en.wikipedia.org/wiki/Connect_Four">Wikipedia:</a>
+</p>
+
+<blockquote>
+   Connect Four (also known as Four Up, Plot Four, Find Four, Four in a Row, and Four in a Line) is a two-player game in
+   which the players first choose a color and then take turns dropping their colored discs from the top into a
+   seven-column, six-row vertically-suspended grid. The pieces fall straight down, occupying the next available space
+   within the column. The object of the game is to connect four of one's own discs of the same color next to each other
+   vertically, horizontally, or diagonally before one's opponent can do so. There are many variations on the board size,
+   the most commonly used being <code>7&times;6</code>, followed by <code>8&times;7</code>, <code>9&times;7</code>,
+   and <code>10&times;7</code>.
+</blockquote>
+
+<p>You can play this game online here:
+   <a target="_top" href="http://www.mathsisfun.com/games/connect4.html">
+      <code>http://www.mathsisfun.com/games/connect4.html</code></a>.
+</p>
+
+<p>For this project, the game will be played on square boards only. (Allowing non-square boards adds complexity to
+   the win-detection algorithm that doesn't relate to this class.  You
+   are welcome to support non-square boards if you wish, as long as
+   you dont' change the public interface.) Your program should take two optional command-line
+   arguments: the length of one side of the board (must be at least 3) and the number of connects required to win the
+   game (must be at least <code>3</code>). If the command line arguments are missing,
+   the board size defaults to <code>8</code> and the number of connects defaults to <code>4</code>.
+   Implement the game for two players. If the command line arguments are invalid, print an error message and quit.</p>
+
+<p class="listHeader">Your program should be invoked using a command of form <code>c4 size win_length</code>. For
+   example, the following command starts a game with a board size of <code>5&times;5</code> and <code>6</code> for the
+   win length:</p>
+
+   <pre>
+   $ ./c4 5 6
+   Beginning a new game with a 5 x 5 board, and a win length of 6
+   </pre>
+
+<h2>Design requirements</h2>
+
+<p class="listHeader">For the most part, you can design your program as you wish; however,
+   there are a few requirements:</p>
+<ul>
+   <li>You must divide your program into reasonable sized functions. A program with a single <code>main</code>
+      method is not acceptable, neither is a program with a few huge functions.
+   </li>
+   <li>The game logic should go in a file named <code>connect4_engine.c</code>.</li>
+
+   <li>You must write a corresponding header file (<code>connect4_engine.h</code>). This header file should contain
+      declarations for only those functions that need to be visible outside <code>connect4_engine.c</code>.
+   </li>
+
+   <li><code>connect4_engine.c</code> may not contain a <code>main</code> function. I suggest you place
+      <code>main</code> in a file named <code>connect4.c</code>.
+</ul>
+
+<p>I will test your game both programatially and from the command line. My test program will drive your game by
+   alternately calling the following two methods:</p>
+
+<dl>
+   <dt><code>int place_token(int player, int column, int num_rows, int num_columns, int
+      board[num_rows][num_columns])</code></dt>
+   <dd>
+      This function should simulate the specified player dropping a token in the specified column. Columns are
+      indexed beginning with <code>0</code>.
+   </dd>
+
+   <dt><code>int winner(int num_rows, int num_columns, int length_to_win, int array[num_rows][num_columns])</code></dt>
+   <dd>This function should examine the contents of <code>array</code> and return the number of the player who won,
+      or <code>-1</code> if nobody has won.
+   </dd>
+</dl>
+
+<p>Thus, your design must work with my tests. My tests will use <code>-1</code> to indicate an empty slot,
+   <code>0</code> for player 1, and <code>1</code> for player 2. If you follow these three conventions,
+   I don't see how your code won't work with my tests. However, if I'm wrong, let me know ASAP. (This means more
+   than two days before the project is due!)</p>
+
+<h2>Getting Started</h2>
+
+<p class="listHeader"> There are two ways to get started:</p>
+<ul>
+   <li> Easy way: Go to your CS 343 project directory and type
+      <code class=".nowrap">git clone eos22.cis.gvsu.edu:/home/kurmasz/public_html/CS343/Connect4_C.git</code>
+   </li>
+
+   <li class="listheader">Longer way: Create a new directory in your CS 343 directory and download:
+      <ul>
+         <li><a href="CuTest.c"><code>CuTest.c</code></a></li>
+         <li><a href="CuTest.h"><code>CuTest.h</code></a></li>
+         <li><a href="c4_engine_test.c"><code>c4_engine_test.c</code></a></li>
+         <li><a href="makefile"><code>makefile</code></a></li>
+      </ul>
+   </li>
+</ul>
+
+<p>Now, add tests to <code>c4_engine_test.c</code>, then write <code>connect4_engine.h</code> and
+   <code>connect4_engine.c</code>. When your tests are complete, and your code passes your tests,
+   write a driver program to actually play a game.</p>
+
+<h2>Reminders</h2>
+
+<ul>
+   <li>Make sure your code exhibits overall good design: Make your functions reasonably small,
+      avoid needless duplication of code, choose reasonable variable names, etc.
+   </li>
+   <li>Add comments where appropriate.</li>
+   <li>Make sure your code <em>gracefully</em> handles unexpected and/or invalid input. For example,
+      the program shouldn't crash if the user tries to put a token in a full column.
+   </li>
+   <li>Your program should recognize a tie.</li>
+   <li>Don't forget to test your code using different board sizes and win lengths.</li>
+</ul>
+
+<h2>Submission</h2>
+
+<p>When your code is complete and correct, submit
+   <code>connect4_engine.c</code>, <code>connect4_engine.h</code>, <code>c4_engine_test.c</code> and any
+   other necessary files that you wrote in Blackboard. Your grade will
+   depend primarily on when I receive code from you that passes all
+   <em>my</em> tests:</p>
+
+<ul>
+   <li>You will receive a one point bonus (up to three) for every day your code is
+      early.
+   </li>
+   <li>You will receive a 10% penalty (rounded up) for every day your code is
+      late.
+   </li>
+   <li>In addition, you will receive an additional 10% penalty every time you
+      submit code that does not pass my tests.
+</ul>
+
+<p>For example, if you submit code on the due date that fails my
+   tests, then submit correct code two days later, your penalty is
+   30%: 10% for failing tests, and 20% for the <em>correct</em>
+   submission being two days late.</p>
+
+<p>I will not grade code submitted without a reasonably complete set
+   of test cases.</p>
+
+<p>Extra Credit (5%): Modify your game to allow non-square boards.</p>
+
+<p><a href="gradesheet.txt">gradesheet</a></p>
+
+<hr>
+<address></address>
+<!-- hhmts start --> Last modified: Fri Jan 11 11:41:31 EST 2013 <!-- hhmts end -->
+</body>
+</html>
