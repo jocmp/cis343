@@ -4,15 +4,15 @@
 
 int place_token(int player, int column, int num_rows,
                         int num_columns, int board[num_rows][num_columns]) {
-
-    for (int i = 0; i < num_rows; i++) {
-
+    int column_index = num_columns - 1;
+    if (column > column_index || column < 0) {
+        // Don't place token if
+        return -1;
     }
-}
 
 int winner(int num_rows, int num_columns, int length_to_win,
         int array[num_rows][num_columns]) {
-
+    return -1;
 }
 
 int check_winner_diagonal_ascend(int num_rows, int num_columns,
@@ -54,4 +54,4 @@ int check_winner_diagonal_ascend(int num_rows, int num_columns,
     }
     return -1;
   }
-  }
+}
