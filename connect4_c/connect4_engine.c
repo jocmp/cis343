@@ -5,7 +5,7 @@ int place_token(int player, int column, int num_rows,
     int column_index = num_columns - 1;
     if (column > column_index || column < 0) {
         // Don't place token if
-        return -1;
+        return ;
     }
     return -1;
 }
@@ -15,41 +15,62 @@ int winner(int num_rows, int num_columns, int length_to_win,
     return -1;
 }
 
+int check_winner_vertical(int num_rows, int num_columns,
+  int length_to_win, int array[num_rows][num_columns]) {
+    return -1;
+}
+
+int check_winner_horizontal(int num_rows, int num_columns,
+  int length_to_win, int array[num_rows][num_columns]) {
+    return -1;
+}
+
 int check_winner_diagonal_ascend(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]) {
-    int win_count;
-    int player;
-    int i;
-    int index_size = num_columns - 1;
-    for (i = 0; i < index_size; i++) {
-      if (array[i][i] == array[i + 1][i + 1]) {
-        win_count++;
-      } else {
-        win_count = 0;
-        player = -1;
+    int i = num_rows - 1; // row index
+    int j = 0; // column index
+    int top = 1;
+    int cols_index_max = num_columns - 2;
+    int win_count = 0;
+    int current_winning_player = -1;
+    for (; i < top; i--) {
+      for (j = 0; j < cols_index_max; j++) {
+        if (arr[i][j] == arr[i + 1][j + 1]) {
+          win_count++;
+          current_winning_player = arr[i][j];
+        } else {
+          win_count = 0;
+          current_winning_player = -1;
+        }
       }
     }
-    if (win_count == length_to_win) {
-      return player;
+    if (win_count >= length_to_win) {
+      return current_winning_player;
     }
     return -1;
 }
 
-int check_winner_diagonal_descend(int num_rows, int num_columns, int length_to_win, int array[num_rows][num_columns]) {
-    int win_count;
-    int player;
-    int i;
-    int index_size = num_columns - 1;
-    for (i = index_size; i > 0; i--) {
-      if (array[i][i] == array[i + 1][i + 1]) {
-        win_count++;
-      } else {
-        win_count = 0;
-        player = -1;
+int check_winner_diagonal_descend(int num_rows, int num_columns,
+  int length_to_win, int array[num_rows][num_columns]) {
+    int i = 0; // row index
+    int j = 0; // column index
+    int row_index_max = num_rows - 2;
+    int cols_index_max = num_columns - 2;
+    int win_count = 0;
+    int current_winning_player = -1;
+    for (i = 0; i < row_index_max; i++) {
+      for (j = 0; j < cols_index_max; j++) {
+        if (arr[i][j] == arr[i + 1][j + 1]) {
+          win_count++;
+          current_winning_player = arr[i][j];
+        } else {
+          win_count = 0;
+          current_winning_player = -1;
+        }
       }
     }
-    if (win_count == length_to_win) {
-      return player;
+    if (win_count >= length_to_win) {
+      return current_winning_player;
     }
     return -1;
 }
