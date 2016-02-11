@@ -1,5 +1,9 @@
 #include "connect4_engine.h"
 
+
+/* arrays are pointers! if they're passed, they modify
+ * the overall reference */
+
 int place_token(int player, int column, int num_rows,
                         int num_columns, int board[num_rows][num_columns]) {
     int column_index = num_columns - 1;
@@ -12,65 +16,67 @@ int place_token(int player, int column, int num_rows,
 
 int winner(int num_rows, int num_columns, int length_to_win,
         int array[num_rows][num_columns]) {
+    check_winner_vertical(num_rows, num_columns, length_to_win, array);
+    check_winner_horizontal(num_rows, num_columns, length_to_win, array);
     return -1;
 }
 
 int check_winner_vertical(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]) {
+    int max_col_index = num_columns - 2;
+    int max_row_index = num_rows - 2;
+    int win_count = 0;
+    int index_player = -1;
+
+    for (int col = 0; col < max_col_index; col++) {
+        for (int row = 0; row < max_row_index; row++) {
+           int current_index = array[row][col];
+           if (current_index == array[row + 1][col] && current_index != -1) {
+               win_count++;
+               index_player = array[row][col];
+               if (win_count == length_to_win) {
+                   return index_player;
+               }
+           } else {
+                win_count = 0;
+                index_player = -1;
+           }
+        }
+    }
     return -1;
 }
 
 int check_winner_horizontal(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]) {
+    int max_col_index = num_columns - 2;
+    int max_row_index = num_rows - 2;
+    int win_count = 0;
+    int index_player = -1;
+    
+    for (int row = 0; row < max_row_index; row++) {
+        for (int col = 0; col < max_col_index; col++) {
+           int current_index = array[row][col];
+           if (current_index == array[row + 1][col] && current_index != -1) {
+               win_count++;
+               index_player = array[row][col];
+               if (win_count == length_to_win) {
+                   return index_player;
+               }
+           } else {
+                win_count = 0;
+                index_player = -1;
+           }
+        }
+    }
     return -1;
 }
 
 int check_winner_diagonal_ascend(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]) {
-    int i = num_rows - 1; // row index
-    int j = 0; // column index
-    int top = 1;
-    int cols_index_max = num_columns - 2;
-    int win_count = 0;
-    int current_winning_player = -1;
-    for (; i < top; i--) {
-      for (j = 0; j < cols_index_max; j++) {
-        if (arr[i][j] == arr[i + 1][j + 1]) {
-          win_count++;
-          current_winning_player = arr[i][j];
-        } else {
-          win_count = 0;
-          current_winning_player = -1;
-        }
-      }
-    }
-    if (win_count >= length_to_win) {
-      return current_winning_player;
-    }
     return -1;
 }
 
 int check_winner_diagonal_descend(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]) {
-    int i = 0; // row index
-    int j = 0; // column index
-    int row_index_max = num_rows - 2;
-    int cols_index_max = num_columns - 2;
-    int win_count = 0;
-    int current_winning_player = -1;
-    for (i = 0; i < row_index_max; i++) {
-      for (j = 0; j < cols_index_max; j++) {
-        if (arr[i][j] == arr[i + 1][j + 1]) {
-          win_count++;
-          current_winning_player = arr[i][j];
-        } else {
-          win_count = 0;
-          current_winning_player = -1;
-        }
-      }
-    }
-    if (win_count >= length_to_win) {
-      return current_winning_player;
-    }
     return -1;
 }
