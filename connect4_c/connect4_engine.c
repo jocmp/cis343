@@ -107,6 +107,38 @@ int check_winner_horizontal(int num_rows, int num_columns,
 }
 
 int check_winner_diagonal_right_down(int num_rows, int num_columns,
+    int length_to_win, int board[num_rows][num_columns]) {
+  int win_count;
+  // The increment for how many "diagonals away from" the left we are
+  for (int diag_left = 2; diag_left < num_rows * 2 - 3; diag_left++) {
+      int extra;
+      if (diag_left < num_rows) {
+        extra = 0;
+      } else {
+        extra = diag_left - num_rows + 1;
+      }
+      win_count = -1;
+      for (int index = extra; index <= diag_left - extra; index++) {
+          int row = index;
+          int col = diag_left - index;
+          if (win_count == 0 && board[row][col] != -1) {
+              ++win_count;
+          }
+          if (board[row - 1][col + 1] == board[row][col]
+                && board[row][col] != -1) {
+            ++win_count;
+          } else {
+            win_count = 0;
+          }
+          if (win_count >= length_to_win) {
+            return board[row][col];
+          }
+      }
+  }
+  return -1;
+}
+
+int check_winner_diagonal_left_down(int num_rows, int num_columns,
   int length_to_win, int board[num_rows][num_columns]) {
     int win_count;
     for (int diag_right = 2; diag_right < num_rows * 2 - 3; diag_right++) {
@@ -120,53 +152,24 @@ int check_winner_diagonal_right_down(int num_rows, int num_columns,
           extra = diag_right - num_rows + 1;
         }
         win_count = -1;
-        for (int row = extra; row <= diag_right - extra; row++) {
-            int col = (num_rows - 1) - (diag_right - row);
+        for (int index = extra; index <= diag_right - extra; index++) {
+            int row = index;
+            int col = (num_rows - 1) - (diag_right - index);
             if (win_count == 0 && board[row][col] != -1) {
                 ++win_count;
             }
+            printf("%d ", board[row][col]);
             if (board[row - 1][col - 1] == board[row][col] &&
                   board[row][col] != -1) {
               ++win_count;
             } else {
               win_count = 0;
             }
-            printf("Right-down count: %d for player %d\n", win_count, board[row][col]);
             if (win_count >= length_to_win) {
-                return board[row][col];
-            }
-          }
-  }
-  return -1;
-}
-
-int check_winner_diagonal_left_down(int num_rows, int num_columns,
-  int length_to_win, int board[num_rows][num_columns]) {
-    int win_count;
-    for (int diag_left = 2; diag_left < num_rows * 2 - 3; diag_left++) {
-        int extra;
-        if (diag_left < num_rows) {
-          extra = 0;
-        } else {
-          extra = diag_left - num_rows + 1;
-        }
-        win_count = -1;
-        for (int index = extra; index <= diag_left - extra; index++) {
-            int row = index;
-            int col = diag_left - index;
-            if (win_count == 0 && board[row][col] != -1) {
-                ++win_count;
-            }
-            if (board[row - 1][col + 1] == board[row][col]
-                      && board[row][col] != -1) {
-              ++win_count;
-            } else {
-              win_count = 0;
-            }
-            if (win_count >= length_to_win) {
-              return board[row][col];
+                printf("\tWe have a winner of %d!", win_count);
             }
         }
+        printf("\n");
     }
     return -1;
 }
