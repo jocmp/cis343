@@ -1,6 +1,5 @@
-
 CC = clang
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -std=c11
 
 c4_objects = connect4.o connect4_engine.o
 c4: $(c4_objects)
