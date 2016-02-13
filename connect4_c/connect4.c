@@ -54,7 +54,7 @@ int main(int argc, char* argv[3]) {
 int print_board(int row_size, int column_size,
   int board[row_size][column_size]) {
     printf("\n");
-    for (int i = row_size - 1; i >= 0; --i) {
+    for (int i = 0; i < row_size; i++) {
         for (int j = 0; j < column_size; j++) {
             if (board[i][j] == -1) {
               printf("%s ", ".");

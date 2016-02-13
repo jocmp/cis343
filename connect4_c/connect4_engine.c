@@ -178,7 +178,7 @@ int check_winner_diagonal_left_up(int num_rows, int num_columns,
 int open_space(int column, int num_rows, int num_columns,
   int board[num_rows][num_columns]) {
     int current_index;
-    for (int row = 0; row < num_rows; row++) {
+    for (int row = num_rows - 1; row > -1; --row) {
        current_index = board[row][column];
        if (current_index < 0) {
          return row;
