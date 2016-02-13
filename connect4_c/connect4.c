@@ -8,6 +8,7 @@
 int print_board(
       int row_size, int column_size, int board[row_size][column_size]);
 void initialize(int num_rows, int num_cols, int board[num_rows][num_cols]);
+void backward_diagonal();
 
 int main(int argc, char* argv[3]) {
     if (argc < 3) {
@@ -25,6 +26,23 @@ int main(int argc, char* argv[3]) {
         cell_dimen, cell_dimen, length_to_win);
     initialize(cell_dimen, cell_dimen, board);
     do {
+     /* backwards diagonal */
+     place_token(1, 1, cell_dimen, cell_dimen, board);
+     place_token(0, 1, cell_dimen, cell_dimen, board);
+     /* column 2*/
+     place_token(1, 2, cell_dimen, cell_dimen, board);
+     place_token(0, 2, cell_dimen, cell_dimen, board);
+     place_token(1, 5, cell_dimen, cell_dimen, board);
+     place_token(0, 2, cell_dimen, cell_dimen, board);
+    /* column 3 */
+     place_token(1, 3, cell_dimen, cell_dimen, board);
+
+     place_token(0, 3, cell_dimen, cell_dimen, board);
+
+     place_token(1, 3, cell_dimen, cell_dimen, board);
+
+     place_token(0, 3, cell_dimen, cell_dimen, board);
+     //////
      printf("Ready player: ");
      if (scanf("%d", &player) != VALID_INPUT) {
         printf("Invalid player!\n");
@@ -55,12 +73,12 @@ int main(int argc, char* argv[3]) {
 int print_board(int row_size, int column_size,
   int board[row_size][column_size]) {
     printf("\n");
-    for (int i = 0; i < row_size; i++) {
+    for (int i = row_size - 1; i >= 0; --i) {
         for (int j = 0; j < column_size; j++) {
             if (board[i][j] == -1) {
-              printf("%s  ", ".");
+              printf("%s ", ".");
             } else {
-              printf("%d  ", board[i][j]);
+              printf("%d ", board[i][j]);
             }
         }
         printf("\n");
@@ -76,4 +94,17 @@ void initialize(int num_rows, int num_cols, int board[num_rows][num_cols]) {
       board[r][c] = EMPTY;
     }
   }
+}
+
+void backward_diagonal()
+{
+ /*
+    . . . . . . .
+    . . . . . . .
+    . . . . . . .
+    . . . 0 . . .
+    . . 0 1 . . .
+    . 0 0 0 . . .
+    0 1 1 1 . 1 .
+  */
 }

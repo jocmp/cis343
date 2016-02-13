@@ -6,9 +6,9 @@ int check_winner_vertical(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]);
 int check_winner_horizontal(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]);
-int check_winner_diagonal_left_down(int num_rows, int num_columns,
+int check_winner_diagonal_left_up(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]);
-int check_winner_diagonal_right_down(int num_rows, int num_columns,
+int check_winner_diagonal_right_up(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]);
 int open_space(int column, int num_rows, int num_columns,
   int array[num_rows][num_columns]);
@@ -19,7 +19,7 @@ int place_token(int player, int column, int num_rows,
     int column_index = num_columns - 1;
     if (column < column_index || column >= 0) {
         int open_row = open_space(column, num_rows, num_columns, board);
-        if (open_row >= 0) {
+        if (open_row > -1) {
           board[open_row][column] = player;
           return player; // This player was successfully placed
         }
@@ -36,9 +36,9 @@ int winner(int num_rows, int num_columns, int length_to_win,
                         num_rows, num_columns, length_to_win, array);
           wins[1] = check_winner_horizontal(
                         num_rows, num_columns, length_to_win, array);
-          wins[2] = check_winner_diagonal_right_down(
+          wins[2] = check_winner_diagonal_right_up(
                       num_rows, num_columns, length_to_win, array);
-          wins[3] = check_winner_diagonal_left_down(
+          wins[3] = check_winner_diagonal_left_up(
                       num_rows, num_columns, length_to_win, array);
           for(int i = 0; i < 3; i++) {
               if (wins[i] == 0)
@@ -106,10 +106,11 @@ int check_winner_horizontal(int num_rows, int num_columns,
     return -1;
 }
 
-int check_winner_diagonal_right_down(int num_rows, int num_columns,
+int check_winner_diagonal_right_up(int num_rows, int num_columns,
     int length_to_win, int board[num_rows][num_columns]) {
   int win_count;
   // The increment for how many "diagonals away from" the left we are
+  // printf("Right up\n");
   for (int diag_left = 2; diag_left < num_rows * 2 - 3; diag_left++) {
       int extra;
       if (diag_left < num_rows) {
@@ -124,6 +125,7 @@ int check_winner_diagonal_right_down(int num_rows, int num_columns,
           if (win_count == 0 && board[row][col] != -1) {
               ++win_count;
           }
+          // printf("%d ", board[row][col]);
           if (board[row - 1][col + 1] == board[row][col]
                 && board[row][col] != -1) {
             ++win_count;
@@ -134,13 +136,15 @@ int check_winner_diagonal_right_down(int num_rows, int num_columns,
             return board[row][col];
           }
       }
+      // printf("\n");
   }
   return -1;
 }
 
-int check_winner_diagonal_left_down(int num_rows, int num_columns,
+int check_winner_diagonal_left_up(int num_rows, int num_columns,
   int length_to_win, int board[num_rows][num_columns]) {
     int win_count;
+    printf("Left up\n");
     for (int diag_right = 2; diag_right < num_rows * 2 - 3; diag_right++) {
         int extra;
         if (diag_right < num_rows) {
@@ -166,7 +170,7 @@ int check_winner_diagonal_left_down(int num_rows, int num_columns,
               win_count = 0;
             }
             if (win_count >= length_to_win) {
-                printf("\tWe have a winner of %d!", win_count);
+              return board[row][col];
             }
         }
         printf("\n");
@@ -177,7 +181,7 @@ int check_winner_diagonal_left_down(int num_rows, int num_columns,
 int open_space(int column, int num_rows, int num_columns,
   int board[num_rows][num_columns]) {
     int current_index;
-    for (int row = num_rows - 1; row >= 0; --row) {
+    for (int row = 0; row < num_rows; row++) {
        current_index = board[row][column];
        if (current_index < 0) {
          return row;

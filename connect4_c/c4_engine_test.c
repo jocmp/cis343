@@ -96,7 +96,7 @@ void place_token_c1(CuTest *tc) {
  *
  ******************************************************************************************/
 
-void horizontal_row0(CuTest* tc) 
+void horizontal_row0(CuTest* tc)
 {
   int num_rows = 7;
   int num_columns = 7;
@@ -124,7 +124,7 @@ void horizontal_row0(CuTest* tc)
 }
 
 
-void vertical_column1(CuTest* tc) 
+void vertical_column1(CuTest* tc)
 {
   int num_rows = 7;
   int num_columns = 7;
@@ -151,7 +151,7 @@ void vertical_column1(CuTest* tc)
   CuAssertIntEquals_Msg(tc, "4 in a row, vertical", 0, answer);
 }
 
-void forward_diagonal(CuTest* tc) 
+void forward_diagonal(CuTest* tc)
 {
  /*
     . . . . . . .
@@ -161,7 +161,7 @@ void forward_diagonal(CuTest* tc)
     . . . 1 0 . .
     . . . 0 0 0 .
     1 . . 1 1 1 0
-  */ 
+  */
 
   int num_rows = 7;
   int num_columns = 7;
@@ -220,7 +220,7 @@ void forward_diagonal(CuTest* tc)
 }
 
 
-void backward_diagonal(CuTest* tc) 
+void backward_diagonal(CuTest* tc)
 {
  /*
     . . . . . . .
@@ -230,7 +230,7 @@ void backward_diagonal(CuTest* tc)
     . . 0 1 . . .
     . 0 0 0 . . .
     0 1 1 1 . 1 .
-  */ 
+  */
 
   int num_rows = 7;
   int num_columns = 7;
