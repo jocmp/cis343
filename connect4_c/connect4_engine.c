@@ -46,11 +46,11 @@ int winner(int num_rows, int num_columns, int length_to_win,
               if (wins[i] == 1)
                 player_two_win = 1;
           }
-          if (player_one_win && player_two_win) {
+          if (player_one_win == 1 && player_two_win == 1) {
             return 2;
-          } else if (player_one_win) {
+          } else if (player_one_win == 1) {
             return 0;
-          } else if (player_two_win) {
+          } else if (player_two_win == 1) {
             return 1;
           }
           return -1;
@@ -58,24 +58,24 @@ int winner(int num_rows, int num_columns, int length_to_win,
 
 int check_winner_vertical(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]) {
-    int max_col_index = num_columns - 1;
-    int max_row_index = num_rows - 1;
     int win_count = 0;
     int index_player = -1;
-
-    for (int col = 0; col < max_col_index; col++) {
-        for (int row = 0; row < max_row_index; row++) {
-           int current_index = array[row][col];
-           if (current_index == array[row + 1][col] && current_index != -1) {
-               win_count++;
-               index_player = array[row][col];
-               if (win_count == length_to_win) {
-                   return index_player;
-               }
-           } else {
-                win_count = 0;
-                index_player = -1;
-           }
+    for (int col = 0; col < num_columns - 1; col++) {
+        for (int row = num_rows - 1; row > 0; --row) {
+          int current_index = array[row][col];
+          if (win_count == 0 && current_index != -1) {
+              ++win_count;
+          }
+          if (current_index == array[row - 1][col] && current_index != -1) {
+              ++win_count;
+              index_player = array[row][col];
+          } else {
+               win_count = 0;
+               index_player = -1;
+          }
+          if (win_count == length_to_win) {
+              return index_player;
+          }
         }
     }
     return -1;
@@ -83,23 +83,23 @@ int check_winner_vertical(int num_rows, int num_columns,
 
 int check_winner_horizontal(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]) {
-    int max_col_index = num_columns - 1;
-    int max_row_index = num_rows - 1;
     int win_count = 0;
     int index_player = -1;
-
-    for (int row = 0; row < max_row_index; row++) {
-        for (int col = 0; col < max_col_index; col++) {
+    for (int row = 0; row < num_rows; row++) {
+        for (int col = 0; col < num_columns - 1; col++) {
            int current_index = array[row][col];
-           if (current_index == array[row + 1][col] && current_index != -1) {
-               win_count++;
+           if (win_count == 0 && current_index != -1) {
+               ++win_count;
+           }
+           if (current_index == array[row][col + 1] && current_index != -1) {
+               ++win_count;
                index_player = array[row][col];
-               if (win_count == length_to_win) {
-                   return index_player;
-               }
            } else {
                 win_count = 0;
                 index_player = -1;
+           }
+           if (win_count == length_to_win) {
+               return index_player;
            }
         }
     }
@@ -109,21 +109,19 @@ int check_winner_horizontal(int num_rows, int num_columns,
 int check_winner_diagonal_right_down(int num_rows, int num_columns,
   int length_to_win, int board[num_rows][num_columns]) {
     int win_count;
-    int diag_max = num_rows;
-    for (int diag_right = 2; diag_right < diag_max * 2 - 3; diag_right++) {
+    for (int diag_right = 2; diag_right < num_rows * 2 - 3; diag_right++) {
         int extra;
-        if (diag_right < diag_max) {
+        if (diag_right < num_rows) {
           extra = 0;
         } else {
           // "Over peak" amount of extra counts
           // Since we keep choosing a new index even though the size
           // of the diagonals is now decreasing
-          extra = diag_right - diag_max + 1;
+          extra = diag_right - num_rows + 1;
         }
         win_count = -1;
-        for (int index = extra; index <= diag_right - extra; index++) {
-            int row = index;
-            int col = (diag_max - 1) - (diag_right - index);
+        for (int row = extra; row <= diag_right - extra; row++) {
+            int col = (num_rows - 1) - (diag_right - row);
             if (win_count == 0 && board[row][col] != -1) {
                 ++win_count;
             }
@@ -133,10 +131,11 @@ int check_winner_diagonal_right_down(int num_rows, int num_columns,
             } else {
               win_count = 0;
             }
+            printf("Right-down count: %d for player %d\n", win_count, board[row][col]);
             if (win_count >= length_to_win) {
                 return board[row][col];
             }
-        }
+          }
   }
   return -1;
 }
@@ -144,13 +143,12 @@ int check_winner_diagonal_right_down(int num_rows, int num_columns,
 int check_winner_diagonal_left_down(int num_rows, int num_columns,
   int length_to_win, int board[num_rows][num_columns]) {
     int win_count;
-    int diag_max = num_rows;
     for (int diag_left = 2; diag_left < num_rows * 2 - 3; diag_left++) {
         int extra;
-        if (diag_left < diag_max) {
+        if (diag_left < num_rows) {
           extra = 0;
         } else {
-          extra = diag_left - diag_max + 1;
+          extra = diag_left - num_rows + 1;
         }
         win_count = -1;
         for (int index = extra; index <= diag_left - extra; index++) {
@@ -176,11 +174,11 @@ int check_winner_diagonal_left_down(int num_rows, int num_columns,
 int open_space(int column, int num_rows, int num_columns,
   int board[num_rows][num_columns]) {
     int current_index;
-      for (int row = num_rows; row >= 0; --row) {
-         current_index = board[row][column];
-         if (current_index < 0) {
-           return row;
-         }
+    for (int row = num_rows - 1; row >= 0; --row) {
+       current_index = board[row][column];
+       if (current_index < 0) {
+         return row;
+       }
   }
   return -1; // No open spaces were found
 }

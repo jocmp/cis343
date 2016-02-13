@@ -19,6 +19,7 @@ int main(int argc, char* argv[3]) {
     int length_to_win = atoi(argv[2]);
     int player;
     int column;
+    int win;
     int board[cell_dimen][cell_dimen];
     printf("Board size: %d x %d, To win: %d\n",
         cell_dimen, cell_dimen, length_to_win);
@@ -36,18 +37,24 @@ int main(int argc, char* argv[3]) {
          fpurge(stdin);
          continue;
      }
-     place_token(player, column, cell_dimen, cell_dimen, board);
-     int win = winner(cell_dimen, cell_dimen, length_to_win, board);
-     if (win >= 0) {
-       printf("Win: %d!\n", win);
+     int placed = place_token(player, column, cell_dimen, cell_dimen, board);
+     if (placed < 0) {
+       printf("\nCouldn't place token at column %d\n", column);
      }
+     win = winner(cell_dimen, cell_dimen, length_to_win, board);
      print_board(cell_dimen, cell_dimen, board);
+     if (win >= 0) {
+       game_in_session = 0;
+       break;
+     }
     } while(game_in_session);
+    printf("Win: %d!\n", win);
     return 0;
 }
 
 int print_board(int row_size, int column_size,
   int board[row_size][column_size]) {
+    printf("\n");
     for (int i = 0; i < row_size; i++) {
         for (int j = 0; j < column_size; j++) {
             if (board[i][j] == -1) {
