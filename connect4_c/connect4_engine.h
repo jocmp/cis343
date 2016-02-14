@@ -10,7 +10,7 @@ int winner(int num_rows, int num_columns, int length_to_win,
 int print_board(
       int row_size, int column_size, int board[row_size][column_size]);
 void initialize(int num_rows, int num_cols, int board[num_rows][num_cols]);
-
+void check_valid_input(int* input);
 void print_winner(int winner);
 
 #endif

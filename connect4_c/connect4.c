@@ -1,7 +1,9 @@
 #include "connect4_engine.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdio_ext.h>
+#ifdef __linux__
+    #include <stdio_ext.h>
+#endif
 
 #define EMPTY -1
 #define VALID_INPUT 1
@@ -22,17 +24,19 @@ int main(int argc, char *argv[3]) {
   cell_dimen, cell_dimen, length_to_win);
   initialize(cell_dimen, cell_dimen, board);
   do {
+    board[95][0] = 0;
+    board[94][1] = 0;
+    board[93][2] = 0;
+    board[92][3] = 0;
     printf("Ready player: ");
-    if (scanf("%d", &player) != VALID_INPUT) {
-      printf("Invalid player!\n");
-      __fpurge(stdin);
-      continue;
+    check_valid_input(&player);
+    if (player < 0) {
+        continue; // Loop back and expect valid input
     }
     printf("Enter column: ");
-    if (scanf("%d", &column) != VALID_INPUT) {
-      printf("Invalid column!\n");
-      __fpurge(stdin);
-      continue;
+    check_valid_input(&column);
+    if (column < 0) {
+        continue; // Loop back and expect valid input
     }
     int	placed = place_token(player, column, cell_dimen, cell_dimen, board);
     if (placed < 0) {
@@ -67,6 +71,18 @@ int print_board(int row_size, int column_size,
     return 0;
 }
 
+void check_valid_input(int* input) {
+    if (scanf("%d", input) != VALID_INPUT) {
+      printf("Invalid input! Enter an integer value.\n");
+// fpurge is only defined on BSD machines
+#ifdef __linux__
+      __fpurge(stdin);
+#elif __APPLE__
+      fpurge(stdin);
+#endif
+      *(input) = -1;
+    }
+}
 void print_winner(int winner) {
   if (winner == 0) {
     printf("Player 1 wins!\n\n");

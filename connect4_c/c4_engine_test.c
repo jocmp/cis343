@@ -43,6 +43,23 @@ void winner_horizontal_r0(CuTest *tc) {
   CuAssertIntEquals_Msg(tc, "0s in bottom row", 0, answer);
 }
 
+void winner_horizontal_r0(CuTest *tc) {
+
+  int num_rows = 100;
+  int num_columns = 100;
+  int array[num_rows][num_columns];
+  int answer;
+  ct_initialize(num_rows, num_columns, array);
+
+  array[95][0] = 0;
+  array[94][1] = 0;
+  array[93][2] = 0;
+  array[92][3] = 0;
+
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "0s in bottom row", 0, answer);
+}
+
 /*******************************************************************************************
  *
  * Test place_token function
@@ -71,7 +88,7 @@ void place_token_c1(CuTest *tc) {
   for (r = 0; r < num_rows; r++) {
     for (c = 0; c < num_columns; c++) {
       if (r != (num_rows -1) || c != 3) {
-	CuAssertIntEquals_Msg(tc, "Should be empty", EMPTY, array[r][c]);
+	       CuAssertIntEquals_Msg(tc, "Should be empty", EMPTY, array[r][c]);
       }
     }
   }
