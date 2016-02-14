@@ -43,22 +43,22 @@ void winner_horizontal_r0(CuTest *tc) {
   CuAssertIntEquals_Msg(tc, "0s in bottom row", 0, answer);
 }
 
-void winner_horizontal_r0(CuTest *tc) {
-
-  int num_rows = 100;
-  int num_columns = 100;
-  int array[num_rows][num_columns];
-  int answer;
-  ct_initialize(num_rows, num_columns, array);
-
-  array[95][0] = 0;
-  array[94][1] = 0;
-  array[93][2] = 0;
-  array[92][3] = 0;
-
-  answer = winner(num_rows, num_columns, 4, array);
-  CuAssertIntEquals_Msg(tc, "0s in bottom row", 0, answer);
-}
+// void winner_horizontal_r0(CuTest *tc) {
+//
+//   int num_rows = 100;
+//   int num_columns = 100;
+//   int array[num_rows][num_columns];
+//   int answer;
+//   ct_initialize(num_rows, num_columns, array);
+//
+//   array[95][0] = 0;
+//   array[94][1] = 0;
+//   array[93][2] = 0;
+//   array[92][3] = 0;
+//
+//   answer = winner(num_rows, num_columns, 4, array);
+//   CuAssertIntEquals_Msg(tc, "0s in bottom row", 0, answer);
+// }
 
 /*******************************************************************************************
  *
