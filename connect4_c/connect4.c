@@ -24,10 +24,6 @@ int main(int argc, char *argv[3]) {
   cell_dimen, cell_dimen, length_to_win);
   initialize(cell_dimen, cell_dimen, board);
   do {
-    board[95][0] = 0;
-    board[94][1] = 0;
-    board[93][2] = 0;
-    board[92][3] = 0;
     printf("Ready player: ");
     check_valid_input(&player);
     if (player < 0) {
