@@ -4,10 +4,6 @@
 #define EMPTY -1
 #define VALID_INPUT 1
 
-/* prototypes */
-int print_board(
-      int row_size, int column_size, int board[row_size][column_size]);
-void initialize(int num_rows, int num_cols, int board[num_rows][num_cols]);
 int main(int argc, char* argv[3]) {
     if (argc < 3) {
       printf("Not enough inputs!\n");
@@ -47,7 +43,7 @@ int main(int argc, char* argv[3]) {
        break;
      }
     } while(game_in_session);
-    printf("Win: %d!\n", win);
+    print_winner(win);
     return 0;
 }
 
@@ -66,6 +62,16 @@ int print_board(int row_size, int column_size,
     }
     printf("\n");
     return 0;
+}
+
+void print_winner(int winner) {
+  if (winner == 0) {
+    printf("Player 1 wins!\n\n");
+  } else if (winner == 1) {
+    printf("Player 2 wins!\n\n");
+  } else if (winner > 1) {
+    printf("Cat's game!\n\n");
+  }
 }
 
 void initialize(int num_rows, int num_cols, int board[num_rows][num_cols]) {

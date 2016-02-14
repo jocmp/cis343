@@ -12,6 +12,8 @@ int check_winner_diagonal_right_up(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]);
 int open_space(int column, int num_rows, int num_columns,
   int array[num_rows][num_columns]);
+int check_full_board(int num_rows, int num_columns,
+  int array[num_rows][num_columns]);
 /* arrays are pointers! if they're passed, they modify
  * the overall reference */
 int place_token(int player, int column, int num_rows,
@@ -32,6 +34,8 @@ int winner(int num_rows, int num_columns, int length_to_win,
           int wins[4] = {-1};
           int player_one_win = -1;
           int player_two_win = -1;
+          int board_full = 0;
+
           wins[0] = check_winner_vertical(
                         num_rows, num_columns, length_to_win, array);
           wins[1] = check_winner_horizontal(
@@ -40,18 +44,22 @@ int winner(int num_rows, int num_columns, int length_to_win,
                       num_rows, num_columns, length_to_win, array);
           wins[3] = check_winner_diagonal_left_up(
                       num_rows, num_columns, length_to_win, array);
+
+          board_full = check_full_board(num_rows, num_columns, array);
+
           for(int i = 0; i < 4; i++) {
               if (wins[i] == 0)
                 player_one_win = 1;
               if (wins[i] == 1)
                 player_two_win = 1;
           }
-          if (player_one_win == 1 && player_two_win == 1) {
-            return 2;
-          } else if (player_one_win == 1) {
+          if (player_one_win == 1) {
             return 0;
           } else if (player_two_win == 1) {
             return 1;
+          }
+          if (board_full == num_columns) {
+              return 2;
           }
           return -1;
 }
@@ -85,8 +93,8 @@ int check_winner_horizontal(int num_rows, int num_columns,
   int length_to_win, int array[num_rows][num_columns]) {
     int win_count = 0;
     int index_player = -1;
-    for (int row = 0; row < num_rows; row++) {
-        for (int col = 0; col < num_columns - 1; col++) {
+   for (int row = 0; row < num_rows; row++) {
+         for (int col = 0; col < num_columns - 1; col++) {
            int current_index = array[row][col];
            if (win_count == 0 && current_index != -1) {
                ++win_count;
@@ -185,4 +193,15 @@ int open_space(int column, int num_rows, int num_columns,
        }
   }
   return -1; // No open spaces were found
+}
+
+int check_full_board(int num_rows, int num_columns,
+  int board[num_rows][num_columns]) {
+    int full_count = 0; // The number of columns that are full
+     for (int col = 0; col < num_columns; col++) {
+        if (board[0][col] != -1) {
+            full_count++;
+        }
+    }
+    return full_count;
 }

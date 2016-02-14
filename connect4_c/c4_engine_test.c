@@ -289,6 +289,70 @@ void backward_diagonal(CuTest* tc)
 }
 
 
+void tie_game(CuTest* tc)
+{
+ /*
+    1 1 1 0 
+    0 1 0 1
+    1 0 0 0
+    0 1 1 1
+  */
+
+  int num_rows = 7;
+  int num_columns = 7;
+  int array[num_rows][num_columns];
+  int answer;
+  ct_initialize(num_rows, num_columns, array);
+
+  /* column 0*/
+  place_token(0, 0, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 1", NO_WINNER_YET, answer);
+
+  /* column 1*/
+  place_token(1, 1, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 2", NO_WINNER_YET, answer);
+
+  place_token(0, 1, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 3", NO_WINNER_YET, answer);
+
+
+  /* column 2*/
+  place_token(1, 2, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 4", NO_WINNER_YET, answer);
+
+  place_token(0, 2, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 5", NO_WINNER_YET, answer);
+
+  place_token(1, 5, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 6", NO_WINNER_YET, answer);
+
+  place_token(0, 2, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 7", NO_WINNER_YET, answer);
+
+ /* column 3 */
+  place_token(1, 3, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 8", NO_WINNER_YET, answer);
+
+  place_token(0, 3, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 9", NO_WINNER_YET, answer);
+
+  place_token(1, 3, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 10", NO_WINNER_YET, answer);
+
+  place_token(0, 3, num_rows, num_columns, array);
+  answer = winner(num_rows, num_columns, 4, array);
+  CuAssertIntEquals_Msg(tc, "Step 11 -- Winner!", 0, answer);
+}
 
 /*  setup */
 
