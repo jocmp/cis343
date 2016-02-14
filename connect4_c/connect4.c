@@ -1,6 +1,7 @@
 #include "connect4_engine.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdio_ext.h>
 
 #define EMPTY -1
 #define VALID_INPUT 1
@@ -24,13 +25,13 @@ int main(int argc, char *argv[3]) {
     printf("Ready player: ");
     if (scanf("%d", &player) != VALID_INPUT) {
       printf("Invalid player!\n");
-      fpurge(stdin);
+      __fpurge(stdin);
       continue;
     }
     printf("Enter column: ");
     if (scanf("%d", &column) != VALID_INPUT) {
       printf("Invalid column!\n");
-      fpurge(stdin);
+      __fpurge(stdin);
       continue;
     }
     int	placed = place_token(player, column, cell_dimen, cell_dimen, board);
