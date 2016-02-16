@@ -151,6 +151,19 @@ void place_token_c99(CuTest *tc) {
     }
 }
 
+void place_token_invalid_index(CuTest *tc) {
+    int num_rows = 100;
+    int num_columns = 100;
+    int array[num_rows][num_columns];
+    int answer = 0;
+
+    ct_initialize(num_rows, num_columns, array);
+    answer = place_token(1, 100, num_rows, num_columns, array);
+    CuAssertIntEquals_Msg(tc, "Should return error, invalid index ", -1, answer);
+    answer = place_token(1, -1, num_rows, num_columns, array);
+    CuAssertIntEquals_Msg(tc, "Should return error, invalid index ", -1, answer);
+}
+
 /*******************************************************************************************
  *
  * Test individual components of connect4_engine
@@ -491,6 +504,7 @@ CuSuite *c4_engine_suite() {
     SUITE_ADD_TEST(suite, place_token_c1);
     SUITE_ADD_TEST(suite, place_token_c5);
     SUITE_ADD_TEST(suite, place_token_c99);
+    SUITE_ADD_TEST(suite, place_token_invalid_index);
     SUITE_ADD_TEST(suite, check_full_board_pass);
     SUITE_ADD_TEST(suite, check_full_board_fail);
     SUITE_ADD_TEST(suite, horizontal_row0);
