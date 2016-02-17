@@ -54,7 +54,8 @@ int winner(int num_rows, int num_columns, int length_to_win,
     return -1;
 }
 
-int check_winner_vertical(int num_rows, int num_columns,
+int check_winner_vertical(int num_rows,
+                          int num_columns,
                           int length_to_win, int array[num_rows][num_columns]) {
     int win_count = 0;
     int index_player = -1;
@@ -65,7 +66,8 @@ int check_winner_vertical(int num_rows, int num_columns,
             if ((win_count == 0) && (current_index != -1)) {
                 ++win_count;
             }
-            if ((current_index == array[row - 1][col]) && (current_index != -1)) {
+            if ((current_index == array[row - 1][col])
+                    && (current_index != -1)) {
                 ++win_count;
                 index_player = array[row][col];
             } else {
@@ -94,7 +96,8 @@ int check_winner_horizontal(int num_rows,
             if ((win_count == 0) && (current_index != -1)) {
                 ++win_count;
             }
-            if ((current_index == array[row][col + 1]) && (current_index != -1)) {
+            if ((current_index == array[row][col + 1])
+                    && (current_index != -1)) {
                 ++win_count;
                 index_player = array[row][col];
             } else {
@@ -146,10 +149,8 @@ int check_winner_diagonal_right_up(int num_rows,
     return -1;
 }
 
-int check_winner_diagonal_left_up(int num_rows,
-                                  int num_columns,
-                                  int length_to_win,
-                                  int board[num_rows][num_columns]) {
+int check_winner_diagonal_left_up(int num_rows, int num_columns,
+                      int length_to_win, int board[num_rows][num_columns]) {
     int win_count = -1;
     int extra = 0;
     // The increment for how many "diagonals away from" the left we are
