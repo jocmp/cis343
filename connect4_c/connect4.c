@@ -28,12 +28,10 @@ int main(int argc, char *argv[3]) {
         printf("Ready player %d\n", current_player + 1);
         printf("Enter column: ");
         check_valid_input(&column);
-        if (column < 0) {
-            continue; // Loop back and expect valid input
-        }
         int placed = place_token(current_player, column, cell_dimen, cell_dimen, board);
         if (placed < 0) {
-            printf("\nCouldn't place token at column %d\n", column);
+            printf("\nCouldn't place token at column %d\n\n", column);
+            continue;
         }
         win = winner(cell_dimen, cell_dimen, length_to_win, board);
         print_board(cell_dimen, cell_dimen, board);
