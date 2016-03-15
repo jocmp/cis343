@@ -1,2 +1,5 @@
 *.o
 *.out
+*.pyc
+.idea/
+.idea/*
