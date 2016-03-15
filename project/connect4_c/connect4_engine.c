@@ -76,9 +76,7 @@ int check_winner_vertical(int num_rows,
             }
             if (win_count == length_to_win) {
                 return index_player;
-            }
-        }
-    }
+    ,
     return -1;
 }
 

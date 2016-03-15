@@ -1,6 +1,7 @@
 class Board(object):
-
+    """docstring for Board"""
     def __init__(self, dimension):
+        super(Board, self).__init__()
         self.rows = dimension
         self.columns = dimension
         self.grid = [[-1 for x in xrange(self.rows)] for y in xrange(self.columns)]
@@ -14,4 +15,5 @@ class Board(object):
                 else:
                     print_board += str(self.grid[i][j]) + "  "
             print_board += "\n"
+
         return print_board
