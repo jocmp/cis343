@@ -1,7 +1,9 @@
-class Board(object):
+#!/usr/bin/env python
+
+class Board:
     """docstring for Board"""
+
     def __init__(self, dimension):
-        super(Board, self).__init__()
         self.rows = dimension
         self.columns = dimension
         self.grid = [[-1 for x in xrange(self.rows)] for y in xrange(self.columns)]
