@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import cPickle
 import getopt
+import os
 import sys
 import signal
 import re
@@ -11,7 +12,10 @@ main_view = None
 
 def signal_handler(signal, frame):
     global main_view
-    main_view.save_state()
+    print "\nKeyboard interrupt.\n"
+    if main_view.game_in_session:
+        print "\nSaving game...\n"
+        main_view.save_state()
     sys.exit(0)
 
 def main():
@@ -26,7 +30,7 @@ def main():
 class MainView:
 
     SAVE_FILENAME = "c4_save"
-    __game_in_session = False
+    game_in_session = False
 
     def __init__(self):
         options, args = getopt.getopt(sys.argv[1:], "")
@@ -42,15 +46,17 @@ class MainView:
             try:
                 answer = raw_input("Saved game found. Do you want to continue " \
                         + "playing? (y/n) ");
+            except KeyboardInterrupt:
+                return
             except NameError:
                 print answer
-        print "Answer is: " + answer
-        if answer != 'y':
+        if answer == 'y':
             if len(args) > 2:
                 print "New game: "
-                self.engine = Connect4Engine(args[0], args[1])
+                self.engine = Connect4Engine(args[0], args[1], args[2])
             else:
                 print 'Not enough arguments!'
+                os.remove(MainView.SAVE_FILENAME)
                 self.engine = None
                 return
         print self.engine.board
@@ -80,7 +86,7 @@ class MainView:
 
     def print_winner(self, winner):
         if winner < 2:
-            print "{w}".format(winner + 1) + "\n"
+            print "Player " + str(winner + 1) + " wins!"
         else:
             print "Cat's game!\n"
 
@@ -90,19 +96,27 @@ class MainView:
         MainView.game_in_session = True
         win = -1
         current_player = 0
+        column = -1
         while MainView.game_in_session:
             print "Ready player " + str(current_player + 1)
             try:
-                column = input("Enter column: ")
+                user_input = raw_input("Enter column: ")
             except KeyboardInterrupt:
-                print "KeyboardInterrupt."
                 return
             except SyntaxError:
                 continue
-            placed =  self.engine.place_token(current_player, column)
+            if (user_input == "quit" or user_input == "exit"):
+                print "\nSaving game...\n"
+                self.save_state()
+                game_in_session = False
+                break
+            elif not valid_input(user_input):
+                continue
+            column = int(user_input)
+            placed = self.engine.place_token(current_player, column)
             if placed < 0:
                 print "\nCouldn't place token at column "\
-                 + str(column) + "\n\n"
+                 + user_input + "\n\n"
                 continue
             print self.engine.board
             current_player = change_player(current_player)
@@ -110,6 +124,7 @@ class MainView:
             if win > 0:
                 game_in_session = False
                 break
+        os.remove(MainView.SAVE_FILENAME)
         self.print_winner(win)
 
 if __name__ == '__main__':

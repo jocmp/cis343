@@ -4,8 +4,8 @@ from Board import Board
 
 class Connect4Engine:
 
-    def __init__(self, dimension, length_to_win):
-        self.board = Board(dimension)
+    def __init__(self, rows, columns, length_to_win):
+        self.board = Board(rows, columns)
         self.length_to_win = length_to_win
 
     def place_token(self, player, column):
