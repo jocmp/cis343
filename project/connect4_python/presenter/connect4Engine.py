@@ -1,22 +1,22 @@
 #!/usr/bin/env python
 from ..model import Board
 
-
 class Connect4Engine:
+
     def __init__(self, dimension, length_to_win):
         self.board = Board(dimension)
         self.length_to_win = length_to_win
+        print self.board
 
     def place_token(self, player, column):
-        column_index = self.board.columns - 1
-        if column < column_index and column >= 0:
+        if column < self.board.columns and column >= 0:
             open_row = self.open_space(column)
             if open_row > -1:
-                self.board.grid[open_row][column] = player.id
-                return player.id  # This player was successfully placed
+                self.board.grid[open_row][column] = player
+                return player  # This player was successfully placed
         return -1  # The value should still be empty
 
-    def winner(self, length):
+    def winner(self):
         wins = []
         player_one_win = -1
         player_two_win = -1
@@ -42,8 +42,8 @@ class Connect4Engine:
     def check_winner_vertical(self):
         win_count = 0
         index_player = -1
-        for column in xrange(0, self.board.columns):
-            for row in xrange(0, self.board.rows):
+        for column in xrange(0, self.board.columns - 1):
+            for row in xrange(0, self.board.rows - 1):
                 current_index = self.board.grid[row][column]
                 if win_count == 0 and current_index != -1:
                     win_count += 1
@@ -60,8 +60,8 @@ class Connect4Engine:
     def check_winner_horizontal(self):
         win_count = 0
         index_player = -1
-        for row in xrange(0, self.board.rows):
-            for column in xrange(0, self.board.columns):
+        for row in xrange(0, self.board.rows - 1):
+            for column in xrange(0, self.board.columns - 1):
                 current_index = self.board.grid[row][column]
                 if win_count == 0 and current_index != -1:
                     win_count += 1
@@ -78,7 +78,7 @@ class Connect4Engine:
     def check_winner_diagonal_right_up(self):
         win_count = -1
         extra = 0
-        rows = self.board.rows
+        rows = self.board.rows - 1
         max_diag = rows * 2 - 3
         for diag_left in xrange(2, max_diag):
             extra = 0
@@ -126,8 +126,9 @@ class Connect4Engine:
         return -1
 
     def open_space(self, column):
-        for row in xrange(self.board.rows, -1, -1):
-            current_index = self.board[row][column]
+        for row in xrange(self.board.rows - 1, -1, -1):
+            print row, column
+            current_index = self.board.grid[row][column]
             if current_index < 0:
                 return row
         return -1  # No open spaces were found
