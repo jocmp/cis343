@@ -5,7 +5,7 @@ import sys
 import signal
 import re
 
-from ..presenter import Connect4Engine
+from Connect4Engine import Connect4Engine
 
 main_view = None
 
@@ -18,48 +18,64 @@ def main():
     global main_view
     main_view = MainView()
     signal.signal(signal.SIGINT, signal_handler)
-    main_view.run()
+    if not (main_view.engine is None):
+        main_view.run()
+    else:
+        return
 
 class MainView:
 
-    SAVE_FILENAME = "connect4_python/c4_save"
+    SAVE_FILENAME = "c4_save"
     __game_in_session = False
 
     def __init__(self):
         options, args = getopt.getopt(sys.argv[1:], "")
-        self.engine = None
+        self.engine = self.load_state()
+        answer = 'n'
         try:
             args = [int(x) for x in args]
         except ValueError:
             print 'Error parsing integer values.'
-            return None
-        if len(args) > 2:
-            self.engine = Connect4Engine(args[0], args[1])
-        else:
-            print 'Not enough arguments!'
+            return
+        # Ask to load game
+        if not (self.engine is None):
+            try:
+                answer = raw_input("Saved game found. Do you want to continue " \
+                        + "playing? (y/n) ");
+            except NameError:
+                print answer
+        print "Answer is: " + answer
+        if answer != 'y':
+            if len(args) > 2:
+                print "New game: "
+                self.engine = Connect4Engine(args[0], args[1])
+            else:
+                print 'Not enough arguments!'
+                self.engine = None
+                return
+        print self.engine.board
 
     def save_state(self):
+        save_file = None
         try:
             save_file = open(MainView.SAVE_FILENAME, 'w')
         except IOError:
             print "Error: Write permissions are not enabled for " \
-            + file_cant_open
-        except OSError:
-            print "Error: Write permissions are not enabled for " \
-            + file_cant_open
+            + MainView.SAVE_FILENAME
         cPickle.dump(self.engine, save_file)
-        save_file.close
+        if not (save_file is None):
+            save_file.close
         return True
 
     def load_state(self):
+        save_file = None
         try:
             save_file = open(MainView.SAVE_FILENAME, 'r')
         except IOError:
             print "Error: Read permissions are not enabled for "\
-            + file_cant_open
-        except OSError:
-            print "Error: Read permissions are not enabled for "\
-            + file_cant_open
+            + MainView.SAVE_FILENAME
+        if not (save_file is None):
+            save_file.close
         return cPickle.load(save_file)
 
     def print_winner(self, winner):
@@ -78,6 +94,9 @@ class MainView:
             print "Ready player " + str(current_player + 1)
             try:
                 column = input("Enter column: ")
+            except KeyboardInterrupt:
+                print "KeyboardInterrupt."
+                return
             except SyntaxError:
                 continue
             placed =  self.engine.place_token(current_player, column)

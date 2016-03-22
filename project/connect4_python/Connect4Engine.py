@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-from ..model import Board
+
+from Board import Board
 
 class Connect4Engine:
 
     def __init__(self, dimension, length_to_win):
         self.board = Board(dimension)
         self.length_to_win = length_to_win
-        print self.board
 
     def place_token(self, player, column):
         if column < self.board.columns and column >= 0:
@@ -127,7 +127,6 @@ class Connect4Engine:
 
     def open_space(self, column):
         for row in xrange(self.board.rows - 1, -1, -1):
-            print row, column
             current_index = self.board.grid[row][column]
             if current_index < 0:
                 return row
