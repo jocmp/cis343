@@ -28,6 +28,9 @@ class MainView:
     def __init__(self):
         options, args = getopt.getopt(sys.argv[1:], "")
         self.engine = None
+        self.engine = load_state()
+        if self.engine is None:
+            return
         try:
             args = [int(x) for x in args]
         except ValueError:
@@ -47,7 +50,10 @@ class MainView:
         except OSError:
             print "Error: Write permissions are not enabled for " \
             + file_cant_open
-        cPickle.dump(self.engine, save_file)
+        try:
+            cPickle.dump(self.engine, save_file)
+        except PicklingError:
+            print "Couldn't pickle game."
         save_file.close
         return True
 
@@ -60,7 +66,12 @@ class MainView:
         except OSError:
             print "Error: Read permissions are not enabled for "\
             + file_cant_open
-        return cPickle.load(save_file)
+        saved_game = None
+        try:
+            saved_game = cPickle.load(save_file)
+        except UnpicklingError:
+            print "Couldn't unpickle game."
+        return saved_game
 
     def print_winner(self, winner):
         if winner < 2:
