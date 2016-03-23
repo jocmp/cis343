@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 class Board:
-    """docstring for Board"""
-
-    def __init__(self, dimension):
-        self.rows = dimension
-        self.columns = dimension
-        self.grid = [[-1 for x in xrange(self.rows)] for y in xrange(self.columns)]
+    
+    def __init__(self, rows, columns):
+        self.rows = rows
+        self.columns = columns
+        self.grid = \
+                [[-1 for x in xrange(self.rows)] for y in xrange(self.columns)]
 
     def __str__(self):
         print_board = ""

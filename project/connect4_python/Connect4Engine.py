@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-from ..model import Board
+
+from Board import Board
 
 class Connect4Engine:
 
-    def __init__(self, dimension, length_to_win):
-        self.board = Board(dimension)
+    def __init__(self, rows, columns, length_to_win):
+        self.board = Board(rows, columns)
         self.length_to_win = length_to_win
-        print self.board
 
     def place_token(self, player, column):
         if column < self.board.columns and column >= 0:
@@ -21,11 +21,11 @@ class Connect4Engine:
         player_one_win = -1
         player_two_win = -1
         board_full = 0
-        wins.append(self.check_winner_vertical())
-        wins.append(self.check_winner_horizontal())
-        wins.append(self.check_winner_diagonal_right_up())
-        wins.append(self.check_winner_diagonal_left_up())
-        board_full = self.check_full_board()
+        wins.append(self.__check_winner_vertical())
+        wins.append(self.__check_winner_horizontal())
+        wins.append(self.__check_winner_diagonal_right_up())
+        wins.append(self.__check_winner_diagonal_left_up())
+        board_full = self.__check_full_board()
         for win in wins:
             if win == 0:
                 player_one_win = 1
@@ -39,7 +39,7 @@ class Connect4Engine:
             return 2
         return -1
 
-    def check_winner_vertical(self):
+    def __check_winner_vertical(self):
         win_count = 0
         index_player = -1
         for column in xrange(0, self.board.columns - 1):
@@ -57,7 +57,7 @@ class Connect4Engine:
                     return index_player
         return -1
 
-    def check_winner_horizontal(self):
+    def __check_winner_horizontal(self):
         win_count = 0
         index_player = -1
         for row in xrange(0, self.board.rows - 1):
@@ -75,7 +75,7 @@ class Connect4Engine:
                     return index_player
         return -1
 
-    def check_winner_diagonal_right_up(self):
+    def __check_winner_diagonal_right_up(self):
         win_count = -1
         extra = 0
         rows = self.board.rows - 1
@@ -100,7 +100,7 @@ class Connect4Engine:
                     return self.board.grid[row][col]
         return -1
 
-    def check_winner_diagonal_left_up(self):
+    def __check_winner_diagonal_left_up(self):
         win_count = -1
         extra = 0
         rows = self.board.rows
@@ -127,13 +127,12 @@ class Connect4Engine:
 
     def open_space(self, column):
         for row in xrange(self.board.rows - 1, -1, -1):
-            print row, column
             current_index = self.board.grid[row][column]
             if current_index < 0:
                 return row
         return -1  # No open spaces were found
 
-    def check_full_board(self):
+    def __check_full_board(self):
         full_count = 0  # The number of columns that are full
         for column in xrange(0, self.board.columns):
             if self.board.grid[0][column] != -1:
