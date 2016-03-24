@@ -1,8 +1,7 @@
-CONNECT 4: PYTHON
----------------------------------------------
+## CONNECT 4: PYTHON
 
-Game Mode
-=============================================
+### Game Mode
+
 How to play:
 * Call `python MainView.py x y z`
   * x = integer value for rows
@@ -12,8 +11,7 @@ How to play:
   * Please enable file mode before execution:
     `chmod u+x MainView.py`
 
-Unit Tests
-=============================================
+### Unit Tests
 * Call `python C4EngineTest.py`
   * 14 unit tests will run
 * No "env" scripting available for unit testing
