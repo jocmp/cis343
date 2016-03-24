@@ -22,10 +22,22 @@ class TestStringMethods(unittest.TestCase):
 
         self.assertEqual(answer, 0, "0s in bottom row")
 
-    def test_winner_diagonal_r48(self):
+    def test_winner_diagonal_down_r48(self):
         self.engine = Connect4Engine(100, 100, 7)
         for i in xrange(48, 55):
             self.engine.board.grid[i][i + 2] = 0
+
+        answer = self.engine.winner()
+        self.assertEqual(answer, 0, "Centered diagonal win")
+
+    def test_winner_diagonal_up_r48(self):
+        self.engine = Connect4Engine(100, 100, 7)
+        row_counter = 48
+        column_counter = 48
+        while row_counter > 41:
+            self.engine.board.grid[row_counter][column_counter] = 0
+            row_counter -= 1
+            column_counter += 1
 
         answer = self.engine.winner()
         self.assertEqual(answer, 0, "Centered diagonal win")

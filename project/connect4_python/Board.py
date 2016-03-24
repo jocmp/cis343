@@ -5,8 +5,7 @@ class Board:
     def __init__(self, rows, columns):
         self.rows = rows
         self.columns = columns
-        self.grid = \
-                [[-1 for x in xrange(self.rows)] for y in xrange(self.columns)]
+        self.grid = [[-1 for x in xrange(self.columns)] for y in xrange(self.rows)]
 
     def __str__(self):
         print_board = ""
