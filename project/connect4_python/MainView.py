@@ -6,7 +6,7 @@ import sys
 import signal
 import re
 
-from Connect4Engine import Connect4Engine
+from modules.Connect4Engine import Connect4Engine
 
 main_view = None
 
