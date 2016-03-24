@@ -1,4 +1,5 @@
-### CONNECT 4: PYTHON
+Connect 4: Python
+---------------------------------------------
 
 #### Game Mode
 
