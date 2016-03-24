@@ -1,5 +1,5 @@
 import unittest
-from Connect4Engine import Connect4Engine
+from modules.Connect4Engine import Connect4Engine
 
 EMPTY = -1
 NO_WINNER_YET = -1
