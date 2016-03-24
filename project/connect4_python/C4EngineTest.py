@@ -14,13 +14,9 @@ class C4EngineTest(unittest.TestCase):
 
     def test_winner_horizontal_r0(self):
         self.engine = Connect4Engine(7, 4, 4)
-        self.engine.board.grid[0][0] = 0
-        self.engine.board.grid[0][1] = 0
-        self.engine.board.grid[0][2] = 0
-        self.engine.board.grid[0][3] = 0
-
+        for i in xrange(4):
+            self.engine.board.grid[0][i] = 0
         answer = self.engine.winner()
-
         self.assertEqual(answer, 0, "0s in bottom row")
 
     def test_winner_diagonal_down_r48(self):
