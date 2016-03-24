@@ -13,7 +13,7 @@ main_view = None
 
 def signal_handler(signal, frame):
     global main_view
-    print "\nKeyboard interrupt.\n"
+    print "\n\nKeyboard interrupt.\n"
     if main_view.game_in_session:
         print "\nSaving game...\n"
         main_view.save_state()
@@ -55,7 +55,7 @@ class MainView:
             if os.path.exists(MainView.SAVE_FILENAME):
                 os.remove(MainView.SAVE_FILENAME)
             if len(args) > 2:
-                print "\nNew game: "
+                print "\nNew game:\n"
                 self.engine = Connect4Engine(args[0], args[1], args[2])
                 self.current_player = 0
             else:
@@ -123,8 +123,13 @@ class MainView:
                 MainView.game_in_session = False
                 return
             elif not valid_input(user_input):
+                print "\nInvalid input. Try again.\n"
                 continue
-            column = int(user_input)
+            try:
+                column = int(user_input)
+            except ValueError:
+                print "\nInvalid input. Try again.\n"
+                continue
             placed = self.engine.place_token(self.current_player, column)
             if placed < 0:
                 print "\nCouldn't place token at column " + user_input + "\n\n"
