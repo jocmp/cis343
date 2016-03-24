@@ -12,7 +12,7 @@ class TestStringMethods(unittest.TestCase):
     ##
     ################################################################
     def test_winner_horizontal_r0(self):
-        self.engine = Connect4Engine(7, 7, 4)
+        self.engine = Connect4Engine(7, 4, 4)
         self.engine.board.grid[0][0] = 0
         self.engine.board.grid[0][1] = 0
         self.engine.board.grid[0][2] = 0

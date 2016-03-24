@@ -23,8 +23,8 @@ class Connect4Engine:
         board_full = 0
         wins.append(self.__check_winner_vertical())
         wins.append(self.__check_winner_horizontal())
-        wins.append(self.__check_winner_diagonal_right_up())
-        wins.append(self.__check_winner_diagonal_left_up())
+        wins.append(self.__check_winner_diagonal_up_right())
+        wins.append(self.__check_winner_diagonal_left_down())
         board_full = self.__check_full_board()
         for win in wins:
             if win == 0:
@@ -75,54 +75,102 @@ class Connect4Engine:
                     return index_player
         return -1
 
-    def __check_winner_diagonal_right_up(self):
-        win_count = -1
-        extra = 0
-        rows = self.board.rows - 1
-        max_diag = rows * 2 - 3
-        for diag_left in xrange(2, max_diag):
-            extra = 0
-            if diag_left < rows:
-                extra = 0
-            else:
-                extra = diag_left - rows + 1;
-            win_count = -1
-            for index in xrange(extra, (diag_left - extra)):
-                row = index
-                col = diag_left - index
-                if win_count == 0 and self.board.grid[row][col]:
+    # def __check_winner_diagonal_right_up(self):
+    #     win_count = -1
+    #     extra = 0
+    #     rows = self.board.rows - 1
+    #     max_diag = rows * 2 - 3
+    #     for diag_left in xrange(2, max_diag):
+    #         extra = 0
+    #         if diag_left < rows:
+    #             extra = 0
+    #         else:
+    #             extra = diag_left - rows + 1;
+    #         win_count = -1
+    #         for index in xrange(extra, (diag_left - extra)):
+    #             row = index
+    #             col = diag_left - index
+    #             if win_count == 0 and self.board.grid[row][col]:
+    #                 win_count += 1
+    #             if self.board.grid[row - 1][col + 1] == self.board.grid[row][col] and self.board.grid[row][col] != -1:
+    #                 win_count += 1
+    #             else:
+    #                 win_count = 0
+    #             if win_count >= self.length_to_win:
+    #                 return self.board.grid[row][col]
+    #     return -1
+
+    # def __check_winner_diagonal_left_up(self):
+    #     win_count = -1
+    #     extra = 0
+    #     rows = self.board.rows
+    #     max_diag = rows * 2 - 3
+    #     for diag_right in xrange(2, max_diag):
+    #         extra = 0
+    #         if (diag_right < rows):
+    #             extra = 0
+    #         else:
+    #             extra = diag_right - rows + 1
+    #         win_count = -1
+    #         for index in xrange(extra, diag_right - extra):
+    #             row = index
+    #             col = (rows - 1) - (diag_right - index)
+    #             if ((win_count == 0) and (self.board.grid[row][col] != -1)):
+    #                 win_count += 1
+    #             if self.board.grid[row - 1][col - 1] == self.board.grid[row][col] and self.board.grid[row][col] != -1:
+    #                 win_count += 1
+    #             else:
+    #                 win_count = 0
+    #             if win_count >= self.length_to_win:
+    #                 return self.board.grid[row][col]
+    #     return -1
+
+    def __check_winner_diagonal_left_down(self):
+        rows = self.board.rows
+        columns = self.board.columns
+        for slice in xrange(rows + columns - 1):
+            slice_elems = []
+            skip_end = 0 if slice < columns else slice - columns + 1
+            skip_start = 0 if slice < rows else slice - rows + 1
+            for j in xrange(slice - skip_start, skip_end + 1, -1):
+                current = self.board.grid[j][slice - j]
+                next = self.board.grid[j - 1][slice - j - 1]
+                slice_elems.append(
+                    self.board.grid[j][slice - j]
+                )
+            win_count = 0
+            for i in xrange(1, len(slice_elems) - 1):
+                if win_count == 0 and slice_elems[i] > -1:
                     win_count += 1
-                if self.board.grid[row - 1][col + 1] == self.board.grid[row][col] and self.board.grid[row][col] != -1:
+                if slice_elems[i + 1] == slice_elems[i] and slice_elems[i] != -1:
                     win_count += 1
                 else:
                     win_count = 0
                 if win_count >= self.length_to_win:
-                    return self.board.grid[row][col]
+                    return slice_elems[i]
         return -1
 
-    def __check_winner_diagonal_left_up(self):
-        win_count = -1
-        extra = 0
+    def __check_winner_diagonal_up_right(self):
         rows = self.board.rows
-        max_diag = rows * 2 - 3
-        for diag_right in xrange(2, max_diag):
-            extra = 0
-            if (diag_right < rows):
-                extra = 0
-            else:
-                extra = diag_right - rows + 1
-            win_count = -1
-            for index in xrange(extra, diag_right - extra):
-                row = index
-                col = (rows - 1) - (diag_right - index)
-                if ((win_count == 0) and (self.board.grid[row][col] != -1)):
+        columns = self.board.columns
+        for slice in xrange(rows + columns - 1):
+            slice_elems = []
+            skip_end = 0 if slice < columns else slice - columns + 1
+            skip_start = 0 if slice < rows else slice - rows + 1
+            for j in xrange(slice - skip_start, skip_end + 1, -1):
+                slice_elems.append(
+                    self.board.grid[rows - j - 1][slice - j]
+                )
+            win_count = 0
+            for i in xrange(0, len(slice_elems) - 1):
+                if win_count == 0 and slice_elems[i] > -1:
                     win_count += 1
-                if self.board.grid[row - 1][col - 1] == self.board.grid[row][col] and self.board.grid[row][col] != -1:
+                if slice_elems[i + 1] == slice_elems[i] and slice_elems[i] != -1:
                     win_count += 1
                 else:
                     win_count = 0
                 if win_count >= self.length_to_win:
-                    return self.board.grid[row][col]
+                    return slice_elems[i]
         return -1
 
     def open_space(self, column):
