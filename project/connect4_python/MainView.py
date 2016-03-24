@@ -10,6 +10,7 @@ from Connect4Engine import Connect4Engine
 
 main_view = None
 
+
 def signal_handler(signal, frame):
     global main_view
     print "\nKeyboard interrupt.\n"
@@ -17,6 +18,7 @@ def signal_handler(signal, frame):
         print "\nSaving game...\n"
         main_view.save_state()
     sys.exit(0)
+
 
 def main():
     global main_view
@@ -27,14 +29,14 @@ def main():
     else:
         return
 
-class MainView:
 
+class MainView:
     SAVE_FILENAME = "c4_save"
     game_in_session = False
 
     def __init__(self):
         options, args = getopt.getopt(sys.argv[1:], "")
-        self.engine = self.load_state()
+        (self.current_player, self.engine) = self.load_state()
         answer = 'n'
         try:
             args = [int(x) for x in args]
@@ -44,8 +46,7 @@ class MainView:
         # Ask to load game
         if not (self.engine is None):
             try:
-                answer = raw_input("Saved game found. Do you want to continue " \
-                        + "playing? (y/n) ")
+                answer = raw_input("\nSaved game found. Do you want to continue playing? (y/n) ")
             except KeyboardInterrupt:
                 return
             except NameError:
@@ -54,10 +55,11 @@ class MainView:
             if os.path.exists(MainView.SAVE_FILENAME):
                 os.remove(MainView.SAVE_FILENAME)
             if len(args) > 2:
-                print "New game: "
+                print "\nNew game: "
                 self.engine = Connect4Engine(args[0], args[1], args[2])
+                self.current_player = 0
             else:
-                print 'Not enough arguments!'
+                print "Not enough arguments!\nExample ./MainView.py rows, columns, win length"
                 if os.path.exists(MainView.SAVE_FILENAME):
                     os.remove(MainView.SAVE_FILENAME)
                 self.engine = None
@@ -69,23 +71,22 @@ class MainView:
         try:
             save_file = open(MainView.SAVE_FILENAME, 'w')
         except IOError:
-            print "Error: Write permissions are not enabled for " \
-            + MainView.SAVE_FILENAME
-        cPickle.dump(self.engine, save_file)
+            print "Error: Write permissions are not enabled for " + MainView.SAVE_FILENAME
+        cPickle.dump((self.current_player, self.engine), save_file)
         if not (save_file is None):
             save_file.close()
         return True
 
-    def load_state(self):
+    @staticmethod
+    def load_state():
         save_file = None
         try:
             if os.path.exists(MainView.SAVE_FILENAME):
                 save_file = open(MainView.SAVE_FILENAME, 'rb')
         except IOError:
-            print "Error: Read permissions are not enabled for "\
-            + MainView.SAVE_FILENAME
+            print "Error: Read permissions are not enabled for " + MainView.SAVE_FILENAME
         except TypeError:
-            return None
+            return (None, None)
         if not (save_file is None):
             try:
                 pickled_game = cPickle.load(save_file)
@@ -93,9 +94,10 @@ class MainView:
                 return pickled_game
             except ValueError:
                 print "Error loading file"
-        return None
+        return (None, None)
 
-    def print_winner(self, winner):
+    @staticmethod
+    def print_winner(winner):
         if winner < 2:
             print "Player " + str(winner + 1) + " wins!"
         else:
@@ -106,17 +108,16 @@ class MainView:
         valid_input = lambda n: re.match('\d', str(n))
         MainView.game_in_session = True
         win = -1
-        current_player = 0
         column = -1
         while MainView.game_in_session:
-            print "Ready player " + str(current_player + 1)
+            print "Ready player " + str(self.current_player + 1)
             try:
                 user_input = raw_input("Enter column: ")
             except KeyboardInterrupt:
                 return
             except SyntaxError:
                 continue
-            if (user_input == "quit" or user_input == "exit"):
+            if user_input.lower() == "quit" or user_input.lower() == "exit":
                 print "\nSaving game...\n"
                 self.save_state()
                 MainView.game_in_session = False
@@ -124,20 +125,20 @@ class MainView:
             elif not valid_input(user_input):
                 continue
             column = int(user_input)
-            placed = self.engine.place_token(current_player, column)
+            placed = self.engine.place_token(self.current_player, column)
             if placed < 0:
-                print "\nCouldn't place token at column "\
-                 + user_input + "\n\n"
+                print "\nCouldn't place token at column " + user_input + "\n\n"
                 continue
             print self.engine.board
-            current_player = change_player(current_player)
+            self.current_player = change_player(self.current_player)
             win = self.engine.winner()
-            if win > 0:
+            if win >= 0:
                 MainView.game_in_session = False
                 break
         if os.path.exists(MainView.SAVE_FILENAME):
             os.remove(MainView.SAVE_FILENAME)
         self.print_winner(win)
+
 
 if __name__ == '__main__':
     main()
