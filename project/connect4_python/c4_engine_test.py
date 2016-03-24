@@ -149,8 +149,7 @@ class C4EngineTestMethods(unittest.TestCase):
         self.engine.place_token(0, 2)
         self.assertEqual(self.engine.winner(), NO_WINNER_YET, "0s in columns [0, 1, 2]")
         self.engine.place_token(0, 3)
-        print board
-        self.assertEqual(self.engine.winner(), NO_WINNER_YET, "4 in a row, horizontal")
+        self.assertEqual(self.engine.winner(), 0, "4 in a row, horizontal")
 
     def test_vertical_column1(self):
         rows = 8
