@@ -2,7 +2,6 @@
 
 from Board import Board
 
-
 class Connect4Engine:
     def __init__(self, rows, columns, length_to_win):
         self.board = Board(rows, columns)
