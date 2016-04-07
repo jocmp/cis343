@@ -1,0 +1,17 @@
+head' :: [Float] -> Float
+head' [] = error "You failed like usual :)"
+head' (arr:_) = arr
+
+get_gpa :: Float -> String
+get_gpa x | x > 4.0 = "A++ :)"
+          | x == 4.0 = "A" 
+          | x > 3.0 = "B"
+          | x > 2.0 = "C"
+          | x > 1.0 = "D"
+          | otherwise = "Why bother."
+
+contrived :: String -> String
+contrived y | (head y) == 'a' = y
+            | (head y) == 'b' = y
+            | (head y) == 'c' = y
+            | otherwise = error "Can't be done. :/"

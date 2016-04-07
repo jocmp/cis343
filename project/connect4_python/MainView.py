@@ -94,7 +94,7 @@ class MainView:
                 return pickled_game
             except ValueError:
                 print "Error loading file"
-        return (None, None)
+        return None, None
 
     @staticmethod
     def print_winner(winner):
@@ -108,7 +108,6 @@ class MainView:
         valid_input = lambda n: re.match('\d', str(n))
         MainView.game_in_session = True
         win = -1
-        column = -1
         while MainView.game_in_session:
             print "Ready player " + str(self.current_player + 1)
             try:
