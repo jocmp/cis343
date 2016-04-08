@@ -5,13 +5,9 @@ import Data.Time.Calendar
 taxRate :: Double
 taxRate = 0.065
 
--- anonymous function '\' returns a list
--- mapped to string -> i
-digitize :: Integer -> [Int]
-digitize nt = map() (show nt)
-
-stringsToIntegers :: [String] -> [Integer]
-stringsToIntegers x = read [x] :: Int
+digitize :: Integer -> [Integer]
+digitize 0 = []
+digitize x = digitize (x `div` 10) ++ [x `mod` 10]
 
 cardType :: Integer -> String
 cardType x | (head (digitize x)) == 4 = "Visa"
@@ -19,12 +15,14 @@ cardType x | (head (digitize x)) == 4 = "Visa"
            | (head (digitize x)) == 6 = "Discover"
            | otherwise = "Not Accepted"
 
--- pastDate :: Integer -> date -> Int -> IO Bool
--- pastDate year month day = (\)
--- pastDate
--- pastDate :: Integer -> date
--- pastDate :: (Integer, Int, Int) -> Bool
--- pastDate year month day =
+pastDate :: Integer -> Int -> Int -> Bool
+pastDate cardYear cardMonth cardDay
+    | cardYear > year = True
+    | cardMonth > month = True
+    | cardDay > day = True
+    | otherwise = False
+    where
+      (year, month, day) =  date
 
 date :: IO (Integer, Int, Int) -- :: (year,month,day)
-date = getCurrentTime >>= return . toGregorian . utctDay
+date = fmap (toGregorian . utctDay) getCurrentTime
