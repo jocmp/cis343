@@ -1,5 +1,6 @@
 import Data.Time.Clock
 import Data.Time.Calendar
+import Numeric
 
 -- Define a constant Float called taxRate as 0.065
 taxRate :: Float
@@ -38,4 +39,5 @@ checkOut num = do
     if amount /= 0
       then do putStrLn (show amount)
               checkOut (amount + num)
-    else putStrLn (show (amount + (num + (calcTax (amount + num)))))
+    -- showGFloat will output to two decimal places
+    else putStrLn (showGFloat (Just 2) (amount + (num + (calcTax (amount + num)))) "")
