@@ -3,8 +3,14 @@
 1) What do you dislike about current languages?
 2) 75 pts - If you could design one
   * Type system
-    * Booleans, basic numeric types, strings, but char type may not
+    * Typed with "var" or "let" for variables and constant values
+    * Statically typed (checked by compiler) with optionally designated data type
+        * this can add to some confusion with Readability, and decreases orthogonality
+    * Strongly typed
+    * Booleans, ordinal types: basic numeric types, strings, but char type may not
     be necessary.
+    * Small, understandable amount of constructed data types, such as list, sets,
+    and maps ala Python
   * Bindings
     * Static binding, with optional type inference
   * Paradigm
